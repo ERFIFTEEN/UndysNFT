@@ -1,0 +1,40 @@
+{
+  "name": "Undys #0001",
+  "description": "A unique pair of digital underwear from the Undys collection.",
+  "image": "ipfs://<hash>/0001.png",
+  "attributes": [
+    {"trait_type": "Type", "value": "Boxers"},
+    {"trait_type": "Color", "value": "Red"},
+    {"trait_type": "Pattern", "value": "Polka Dots"},
+    {"trait_type": "Accessory", "value": "Gold Lace"}
+  ]
+}
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+
+contract UndysNFT is ERC721, Ownable {
+    uint256 public totalSupply;
+    string private _baseURI;
+
+    constructor(string memory baseURI) ERC721("Undys", "UNDY") Ownable(msg.sender) {
+        _baseURI = baseURI;
+    }
+
+    function mint(address to, uint256 tokenId) external onlyOwner {
+        require(tokenId <= 10000, "Exceeds max supply");
+        _mint(to, tokenId);
+        totalSupply++;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseURI;
+    }
+
+    function setBaseURI(string memory newBaseURI) external onlyOwner {
+        _baseURI = newBaseURI;
+    }
+}
